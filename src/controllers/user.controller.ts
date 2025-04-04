@@ -1,5 +1,5 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiHeader } from '@nestjs/swagger';
 import {
   CreateUserDto,
   CreateUserResponseDto,
@@ -8,9 +8,15 @@ import { CreateUserService } from 'src/use-cases/user/create-user/create-user.se
 import { GetUserResponseDto } from '../use-cases/user/get-user/get-user.dto';
 import { GetUserService } from '../use-cases/user/get-user/get-user.service';
 import { GetAllUsersService } from '../use-cases/user/get-all/get-all.service';
+import { JwtGuard } from '../use-cases/auth/guard/guard.service';
 
 @Controller('users')
-@ApiTags('users')
+@ApiTags('Users')
+@ApiHeader({
+  name: 'authorization',
+  description: 'Access token',
+  required: true,
+})
 export class UserController {
   constructor(
     private readonly createUserService: CreateUserService,
@@ -19,6 +25,7 @@ export class UserController {
   ) {}
 
   @Post()
+  @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Creates a new user' })
   @ApiResponse({
     status: 201,
@@ -33,6 +40,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Retrieves a user by ID' })
   @ApiResponse({
     status: 200,
@@ -45,6 +53,7 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Retrieves all users' })
   @ApiResponse({
     status: 200,

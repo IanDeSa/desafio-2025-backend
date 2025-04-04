@@ -13,3 +13,17 @@ services:
       MARIADB_HOST: ${DB_HOST}
     ports:
       - "${DB_PORT}:3306"
+    networks:
+      - backend_api
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - backend_api
+
+  network:
+    backend_api:
+      name: backend_api
+      driver: bridge

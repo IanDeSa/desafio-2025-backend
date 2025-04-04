@@ -11,8 +11,6 @@ export class UserRepository {
   ) {}
 
   async findOneById(id: number): Promise<User | null> {
-    console.log('UserRepository', id);
-    // Check if the user exists
     return await this.userRepository.findOne({ where: { id } });
   }
 
@@ -22,5 +20,9 @@ export class UserRepository {
 
   async create(user: User): Promise<User> {
     return await this.userRepository.save(user);
+  }
+
+  async findUserByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { email } });
   }
 }

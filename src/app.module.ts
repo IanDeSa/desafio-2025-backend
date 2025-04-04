@@ -6,6 +6,7 @@ import { UserController } from './controllers/user.controller';
 import { typeOrmConfig } from './database/config/config';
 import { RepositoryModule } from './repositories/repository.module';
 import { UseCaseModule } from './use-cases/use-case-module';
+import { AuthController } from './controllers/auth.controller';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { UseCaseModule } from './use-cases/use-case-module';
     RepositoryModule,
     UseCaseModule,
   ],
-  controllers: [HealthCheckController, UserController],
+  controllers: [AuthController, HealthCheckController, UserController],
 })
 export class AppModule {}
