@@ -2,38 +2,38 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  UnauthorizedException,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Observable } from 'rxjs';
 import * as dotenv from 'dotenv';
-
 dotenv.config();
 
 @Injectable()
 export class JwtGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private jwtService: JwtService) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = request.headers['token'];
-
     if (!token) {
-      throw new UnauthorizedException('Token missing');
+      throw new HttpException('Token not authorized', HttpStatus.UNAUTHORIZED);
     }
 
     try {
-      const payload = this.jwtService.verify(token, {
+      const decoded = this.jwtService.verify(token, {
         secret: process.env.JWT_SECRET,
       });
-
-      request.user = payload;
-
+      request.user = decoded;
+      request.token = token;
       return true;
-    } catch {
+    } catch (e) {
+      console.error('Error verifying token:', e);
       throw new HttpException(
-        'Invalid or expired token',
+        'Invalid token or expired',
         HttpStatus.UNAUTHORIZED,
       );
     }

@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  UseGuards,
+  Headers,
+  Res,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiHeader } from '@nestjs/swagger';
 import {
   CreateUserDto,
@@ -9,14 +18,11 @@ import { GetUserResponseDto } from '../use-cases/user/get-user/get-user.dto';
 import { GetUserService } from '../use-cases/user/get-user/get-user.service';
 import { GetAllUsersService } from '../use-cases/user/get-all/get-all.service';
 import { JwtGuard } from '../use-cases/auth/guard/guard.service';
+import { HttpHeaderRequest } from '../@types';
+import { Response } from 'express';
 
 @Controller('users')
 @ApiTags('Users')
-@ApiHeader({
-  name: 'authorization',
-  description: 'Access token',
-  required: true,
-})
 export class UserController {
   constructor(
     private readonly createUserService: CreateUserService,
@@ -25,7 +31,6 @@ export class UserController {
   ) {}
 
   @Post()
-  @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Creates a new user' })
   @ApiResponse({
     status: 201,
@@ -33,13 +38,23 @@ export class UserController {
     type: CreateUserResponseDto,
   })
   async create(
+    @Headers() headers: HttpHeaderRequest,
     @Body() createUserDto: CreateUserDto,
-  ): Promise<CreateUserResponseDto> {
-    const user = await this.createUserService.execute(createUserDto);
-    return user;
+    @Res() res: Response,
+  ) {
+    const response = await this.createUserService.execute({
+      body: createUserDto,
+      headers,
+    });
+    res.status(response.status).json(response.body);
   }
 
   @Get(':id')
+  @ApiHeader({
+    name: 'token',
+    description: 'Access token',
+    required: true,
+  })
   @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Retrieves a user by ID' })
   @ApiResponse({
@@ -47,12 +62,24 @@ export class UserController {
     description: 'User successfully retrieved',
     type: GetUserResponseDto,
   })
-  async findOne(@Param('id') id: number): Promise<GetUserResponseDto | null> {
-    const user = await this.getUserService.execute(id);
-    return user;
+  async findOne(
+    @Headers() headers: HttpHeaderRequest,
+    @Param('id') id: number,
+    @Res() res: Response,
+  ) {
+    const response = await this.getUserService.execute({
+      headers,
+      params: { id },
+    });
+    res.status(response.status).json(response.body);
   }
 
   @Get()
+  @ApiHeader({
+    name: 'token',
+    description: 'Access token',
+    required: true,
+  })
   @UseGuards(JwtGuard)
   @ApiOperation({ summary: 'Retrieves all users' })
   @ApiResponse({
@@ -60,8 +87,8 @@ export class UserController {
     description: 'Users successfully retrieved',
     type: [GetUserResponseDto],
   })
-  async findAll(): Promise<GetUserResponseDto[]> {
-    const user = await this.getAllUsersService.execute();
-    return user;
+  async findAll(@Headers() headers: HttpHeaderRequest, @Res() res: Response) {
+    const response = await this.getAllUsersService.execute();
+    res.status(response.status).json(response.body);
   }
 }

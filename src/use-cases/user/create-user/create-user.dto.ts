@@ -82,3 +82,8 @@ export class CreateUserResponseDto {
   })
   updatedAt: Date;
 }
+
+export class CreateUserResponse {
+  body: CreateUserResponseDto;
+  status: number;
+}

@@ -7,6 +7,8 @@ import { GetAllUsersService } from './user/get-all/get-all.service';
 import { JwtGuard } from './auth/guard/guard.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginService } from './auth/login/login.service';
+import { CreateShedulingService } from './scheduling/create-scheduling/create-scheduling.service';
+import { GetAllShedulingByUserIdService } from './scheduling/get-all-scheduling-by-user-id/get-all-scheduling-by-user-id.service';
 
 @Module({
   providers: [
@@ -17,6 +19,8 @@ import { LoginService } from './auth/login/login.service';
     JwtGuard,
     JwtService,
     LoginService,
+    CreateShedulingService,
+    GetAllShedulingByUserIdService,
   ],
   exports: [
     CreateUserService,
@@ -26,6 +30,8 @@ import { LoginService } from './auth/login/login.service';
     JwtGuard,
     JwtService,
     LoginService,
+    CreateShedulingService,
+    GetAllShedulingByUserIdService,
   ],
   imports: [RepositoryModule],
 })

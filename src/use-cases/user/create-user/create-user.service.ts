@@ -2,14 +2,16 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '../../../database/models/user.entity';
 import { UserRepository } from 'src/repositories/user.repository';
 import * as bcrypt from 'bcryptjs';
-import { CreateUserResponseDto } from './create-user.dto';
+import { CreateUserResponse } from './create-user.dto';
+import { CreateUserRequest } from '@/src/@types/users';
 
 @Injectable()
 export class CreateUserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute(userData: Partial<User>): Promise<CreateUserResponseDto> {
+  async execute(data: CreateUserRequest): Promise<CreateUserResponse> {
     const user = new User();
+    const userData = data.body;
     Object.assign(user, userData);
 
     if (user.password) {
@@ -26,12 +28,15 @@ export class CreateUserService {
         );
       }
       return {
-        id: response.id,
-        name: response.name,
-        email: response.email,
-        role: response.role,
-        createdAt: response.createdAt,
-        updatedAt: response.updatedAt,
+        body: {
+          id: response.id,
+          name: response.name,
+          email: response.email,
+          role: response.role,
+          createdAt: response.createdAt,
+          updatedAt: response.updatedAt,
+        },
+        status: HttpStatus.CREATED,
       };
     } catch (error) {
       if (error.sqlMessage.includes('Duplicate entry')) {

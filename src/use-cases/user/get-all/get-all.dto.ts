@@ -40,20 +40,12 @@ export class GetUserResponseDto {
   updatedAt: Date;
 }
 
-export class GetUserDto {
-  @ApiProperty({
-    description: 'User id',
-    example: 1,
-  })
-  id: number;
-}
-
 export class GetUserResponse {
   @ApiProperty({
     description: 'Response body containing the created user details',
     type: GetUserResponseDto,
   })
-  body: GetUserResponseDto;
+  body: GetUserResponseDto[];
 
   @ApiProperty({
     description: 'HTTP status code',
