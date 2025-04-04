@@ -26,6 +26,18 @@ export class GetUserResponseDto {
     enum: Role,
   })
   role: Role;
+
+  @ApiProperty({
+    description: 'User created at',
+    example: '2023-10-01T12:00:00Z',
+  })
+  createdAt: Date;
+
+  @ApiProperty({
+    description: 'User updated at',
+    example: '2023-10-01T12:00:00Z',
+  })
+  updatedAt: Date;
 }
 
 export class GetUserDto {
