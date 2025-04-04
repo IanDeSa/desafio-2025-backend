@@ -1,27 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { EntitiesModule } from './entities/entities.module';
 import { HealthCheckController } from './controllers/health-check.controller';
-import { HealthCheckService } from './use-cases/health-check.service';
+import { UserController } from './controllers/user.controller';
+import { typeOrmConfig } from './database/config/config';
+import { RepositoryModule } from './repositories/repository.module';
+import { UseCaseModule } from './use-cases/use-case-module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mariadb',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT, 10) || 3306,
-      username: process.env.DB_USERNAME || 'root',
-      password: process.env.DB_PASSWORD || 'root',
-      database: process.env.DB_NAME || 'database',
-      entities: [],
-    }),
-    EntitiesModule,
+    TypeOrmModule.forRoot(typeOrmConfig),
+    RepositoryModule,
+    UseCaseModule,
   ],
-  controllers: [HealthCheckController],
-  providers: [HealthCheckService],
+  controllers: [HealthCheckController, UserController],
 })
 export class AppModule {}

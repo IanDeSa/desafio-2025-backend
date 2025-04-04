@@ -6,7 +6,7 @@ import {
   Column,
 } from 'typeorm';
 import { User } from './user.entity';
-import { SchedulingStatus } from 'src/enums/scheduling-status.enum';
+import { SchedulingStatus } from '../../enums/scheduling-status.enum';
 
 @Entity()
 export class Scheduling {

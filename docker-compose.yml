@@ -11,10 +11,5 @@ services:
       MARIADB_USER: ${DB_USERNAME}
       MARIADB_PORT: ${DB_PORT}
       MARIADB_HOST: ${DB_HOST}
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 3m
-      timeout: 10s
-      retries: 3
     ports:
       - "${DB_PORT}:3306"
