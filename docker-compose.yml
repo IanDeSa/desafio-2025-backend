@@ -7,11 +7,14 @@ services:
       - .env
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_USER: ${DB_USERNAME}
+      MARIADB_PORT: ${DB_PORT}
+      MARIADB_HOST: ${DB_HOST}
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 3m
       timeout: 10s
       retries: 3
     ports:
-      - "3307:3306"
+      - "${DB_PORT}:3306"
