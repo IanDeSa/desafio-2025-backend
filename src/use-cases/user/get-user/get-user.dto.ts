@@ -27,3 +27,11 @@ export class GetUserResponseDto {
   })
   role: Role;
 }
+
+export class GetUserDto {
+  @ApiProperty({
+    description: 'User id',
+    example: 1,
+  })
+  id: number;
+}

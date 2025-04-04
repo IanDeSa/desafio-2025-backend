@@ -8,7 +8,7 @@ import {
 import { User } from './user.entity';
 import { SchedulingStatus } from '../../enums/scheduling-status.enum';
 
-@Entity()
+@Entity('scheduling')
 export class Scheduling {
   @PrimaryGeneratedColumn()
   id: number;

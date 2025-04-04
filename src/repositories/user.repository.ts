@@ -7,10 +7,12 @@ import { Repository } from 'typeorm';
 export class UserRepository {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private userRepository: Repository<User>,
   ) {}
 
   async findOneById(id: number): Promise<User | null> {
+    console.log('UserRepository', id);
+    // Check if the user exists
     return await this.userRepository.findOne({ where: { id } });
   }
 
