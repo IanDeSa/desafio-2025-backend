@@ -42,10 +42,10 @@ export class GetUserResponseDto {
 
 export class GetUserDto {
   @ApiProperty({
-    description: 'User id',
-    example: 1,
+    description: 'User e-mail',
+    example: 'joao.silva@example.com',
   })
-  id: number;
+  email: string;
 }
 
 export class GetUserResponse {

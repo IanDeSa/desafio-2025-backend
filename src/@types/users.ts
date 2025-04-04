@@ -17,4 +17,6 @@ export type RequestWithHeaders<THeaders> = {
 
 export type CreateUserRequest = RequestWithBodyAndHeaders<CreateUserDto>;
 
-export type UserRequestWithId = RequestWithHeadersAndParams<{ id: number }>;
+export type UserRequestWithEmail = RequestWithHeadersAndParams<{
+  email: string;
+}>;

@@ -49,7 +49,7 @@ export class UserController {
     res.status(response.status).json(response.body);
   }
 
-  @Get(':id')
+  @Get('/:email')
   @ApiHeader({
     name: 'token',
     description: 'Access token',
@@ -64,12 +64,12 @@ export class UserController {
   })
   async findOne(
     @Headers() headers: HttpHeaderRequest,
-    @Param('id') id: number,
+    @Param('email') email: string,
     @Res() res: Response,
   ) {
     const response = await this.getUserService.execute({
       headers,
-      params: { id },
+      params: { email },
     });
     res.status(response.status).json(response.body);
   }

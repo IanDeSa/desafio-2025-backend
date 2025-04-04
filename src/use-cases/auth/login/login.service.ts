@@ -24,7 +24,6 @@ export class LoginService {
       );
     }
     const user = await this.userRepository.findUserByEmail(email);
-
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
